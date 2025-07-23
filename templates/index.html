@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+     <link href="{{ url_for('static', filename='assets/logo-trans.png') }}" rel="icon" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    <title>MediHelp</title>
+  </head>
+  <body>
+    <header>
+      <nav class="section__container nav__container">
+        <div class="nav__logo">
+          <img src="{{ url_for('static', filename='assets/logo-trans.png') }}" alt="MediHelp Logo" class="logo-image">Medi<span>Help</span></div>
+        <ul class="nav__links">
+          <li class="link"><a href="#home">Home</a></li>
+          <li class="link"><a href="#about">About Us</a></li>
+          <li class="link"><a href="#service">Services</a></li>
+        </ul>
+
+        
+          {% if 'user' in session %}
+              <button class="btn" onclick="window.location.href='{{ url_for('logout') }}';">Logout</button>
+              
+          {% else %}
+
+              <button class="btn" onclick="window.location.href='{{ url_for('login') }}';">Login</button>
+          {% endif %}
+      </nav>
+
+      <div class="section__container header__container" id="home">
+        <div class="header__content">
+          <h1>WELCOME TO MEDIHELP</h1>
+          <p>
+            Your personal health sidekick that never judges your pizza nights! With AI-powered insights, it predicts health risks, tracks your habits, and even listens to your coughs. All while keeping your data safe and sound—HIPAA and GDPR approved. Stay healthy, stay smart, and let MediHelp do the thinking!
+          </p>
+          <a href="#service"> <button class="btn">See Services</button></a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Services Section -->
+    <section class="section__container service__container" id="service">
+      <div class="service__header">
+        <div class="service__header__content">
+          <h2 class="section__header">Our Special Service</h2>
+          <p>Comprehensive health screening and routine medical check-up service</p>
+        </div>
+      </div>
+      <div class="service__grid">
+        <div class="service__card" >
+          <span><i class="ri-microscope-line"></i></span>
+          <h4>AI-Powered Health Chatbot</h4>
+          <p>Your personal health assistant, always ready to listen and guide you toward better health</p>
+        </div>
+        <div class="service__card" onclick="window.location.href='{{ url_for('info') }}'">
+          <span><i class="ri-mental-health-line"></i></span>
+          <h4>Personalized Health Recommendations</h4>
+          <p>Tailored advice for a healthier you—because your wellness journey is unique</p>
+        </div>
+        <div class="service__card" onclick="window.location.href='{{ url_for('dashboard') }}'">
+          <span><i class="ri-hospital-line"></i></span>
+          <h4>Disease Prediction Services</h4>
+          <p>Predicting tomorrow’s health risks today, so you can act today for a healthier tomorrow</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section__container about__container" id="about">
+      <div class="about__content">
+        <h2 class="section__header">About Us</h2>
+        <p>
+          MediHelp is a forward-thinking health tech company that is revolutionizing healthcare with its AI-powered virtual health companion. Our platform combines the power of predictive analytics, multimodal input support, and personalized recommendations to empower individuals to take control of their health.
+        </p>
+        <p>
+          Driven by a commitment to security and regulatory compliance, MediHelp ensures your data is safeguarded with HIPAA and GDPR standards, making it a trusted platform for managing your health.
+        </p>
+      </div>
+      <div class="about__image">
+        <img src="{{ url_for('static', filename='assets/image.png') }}" alt="about">
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="section__container why__container" id="blog">
+      <div class="why__image">
+        <img src="{{ url_for('static', filename='assets/choose.jpg') }}" alt="why choose us" />
+      </div>
+      <div class="why__content">
+        <h2 class="section__header">Why Choose Us</h2>
+        <p>
+          Empower your health with our AI-driven Virtual Health Companion. Get real-time insights, early risk detection, and personalized recommendations, all while ensuring privacy and security.
+        </p>
+          <div class="why__grid">
+          <span><i class="ri-hand-heart-line"></i></span>
+          <div>
+            <h4>Intensive Care</h4>
+            <p>Access expert guidance from experienced doctors to address critical health conditions swiftly and effectively.</p>
+          </div>
+          <span><i class="ri-hospital-line"></i></span>
+          <div>
+            <h4>Disease Analysis & Prediction</h4>
+            <p>Our AI analyzes your health data to predict risks of diseases like diabetes and heart conditions, helping you stay ahead of your health.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="info-section">
+      <div class="tabs">
+        <ul class="tab-list">
+          <li class="tab-item active" data-tab="tab-1">Cardiology</li>
+          <li class="tab-item" data-tab="tab-2">Respiratory Disorders</li>
+          <li class="tab-item" data-tab="tab-3">Diabetes</li>
+          <li class="tab-item" data-tab="tab-4">Pediatrics</li>
+          <li class="tab-item" data-tab="tab-5">Eye Care</li>
+        </ul>
+      </div>
+    
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab-1">
+          <div class="tab-pane-content">
+            <div class="text">
+              <h3>Cardiology</h3>
+              <p class="description">Cardiology focuses on diagnosing and treating heart conditions, including heart disease, arrhythmias, and hypertension. Early intervention is crucial in managing risk factors like high blood pressure, cholesterol, and lifestyle choices to prevent severe heart complications. Regular monitoring and lifestyle changes can significantly improve heart health and quality of life.</p>
+            </div>
+            <div class="image">
+              <img src="{{ url_for('static', filename='assets/departments-1.jpg') }}" alt="Cardiology">
+
+            </div>
+          </div>
+        </div>
+    
+        <div class="tab-pane" id="tab-2">
+          <div class="tab-pane-content">
+            <div class="text">
+              <h3>Respiratory Disorders</h3>
+              <p class="description">Respiratory disorders, such as asthma, chronic obstructive pulmonary disease (COPD), and pneumonia, affect breathing and lung function. Symptoms include shortness of breath, coughing, and wheezing. Early diagnosis and treatment are key to managing these conditions, and avoiding triggers, along with proper medication, can help maintain lung health and reduce flare-ups.</p>
+            </div>
+            <div class="image">
+              <img src="{{ url_for('static', filename='assets/departments-2.jpg') }}" alt="Cardiology">
+
+            </div>
+          </div>
+        </div>
+    
+        <div class="tab-pane" id="tab-3">
+          <div class="tab-pane-content">
+            <div class="text">
+              <h3>Diabetes</h3>
+              <p class="description">Diabetes is a chronic condition that affects the body’s ability to regulate blood sugar levels. Type 1 and Type 2 diabetes require careful management of diet, exercise, and medication. Regular blood sugar monitoring and lifestyle adjustments are essential for preventing complications such as heart disease, kidney damage, and nerve issues.</p>
+            </div>
+            <div class="image">
+              <img src="{{ url_for('static', filename='assets/departments-3.jpg') }}" alt="Cardiology">
+
+            </div>
+          </div>
+        </div>
+    
+        <div class="tab-pane" id="tab-4">
+          <div class="tab-pane-content">
+            <div class="text">
+              <h3>Pediatrics</h3>
+              <p class="description">MediHelp Hospital offers a wide range of pediatric treatments, ensuring that children receive the specialized care they need for various health conditions, from routine check-ups to complex illnesses. With a team of experienced pediatricians, MediHelp Hospital is dedicated to providing comprehensive care tailored to the unique needs of each child, focusing on their growth, development, and overall well-being.</p>
+            </div>
+            <div class="image">
+              <img src="{{ url_for('static', filename='assets/departments-4.jpg') }}" alt="Cardiology">
+
+            </div>
+          </div>
+        </div>
+    
+        <div class="tab-pane" id="tab-5">
+          <div class="tab-pane-content">
+            <div class="text">
+              <h3>Eye Care</h3>
+              <p class="description">MediHelp Hospital offers specialized eye care treatments, including cataract surgery and glaucoma management, ensuring patients receive comprehensive care tailored to their unique vision needs. With state-of-the-art technology and experienced ophthalmologists, MediHelp Hospital provides top-quality eye care services, from routine check-ups to advanced surgical procedures, prioritizing patient safety and comfort.</p>
+            </div>
+            <div class="image">
+              <img src="{{ url_for('static', filename='assets/departments-5.jpg') }}" alt="Cardiology">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <section class="section__container doctors__container" id="pages">
+      <div class="doctors__header">
+        <div class="doctors__header__content">
+          <h2 class="section__header">Our Special Doctors</h2>
+          <p>
+            We take pride in our exceptional team of doctors, each a specialist
+            in their respective fields.
+          </p>
+        </div>
+      </div>
+      <div class="doctors__grid">
+        <div class="doctors__card">
+          <div class="doctors__card__image">
+            <img src="{{ url_for('static', filename='assets/choose-us.jpg') }}" alt="doctor">
+            <div class="doctors__socials">
+              <span><i class="ri-instagram-line"></i></span>
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
+            </div>
+          </div>
+          <h4>Dr.Venkat Prabhu</h4>
+          <p>Diabetologist</p>
+        </div>
+        <div class="doctors__card">
+          <div class="doctors__card__image">
+            <img src="{{ url_for('static', filename='assets/viks.jpg') }}" alt="doctor">
+            <div class="doctors__socials">
+              <span><i class="ri-instagram-line"></i></span>
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
+            </div>
+          </div>
+          <h4>Dr.Vikasini Akalaivan</h4>
+          <p>Cardiologist</p>
+        </div>
+        <div class="doctors__card">
+          <div class="doctors__card__image">
+            <img src="{{ url_for('static', filename='assets/doctor-2.jpg') }}" alt="doctor">
+            <div class="doctors__socials">
+              <span><i class="ri-instagram-line"></i></span>
+              <span><i class="ri-facebook-fill"></i></span>
+              <span><i class="ri-heart-fill"></i></span>
+              <span><i class="ri-twitter-fill"></i></span>
+            </div>
+          </div>
+          <h4>Dr.Vijay Prabhakaran</h4>
+          <p>Pulmonologist</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="section__container footer__container">
+        <div class="footer__col">
+          <h3>Medi<span>Help</span></h3>
+          <p>
+            We are honored to be a part of your healthcare journey and committed to delivering compassionate, personalized, and top-notch care every step of the way.
+          </p>
+        </div>
+        <div class="footer__col">
+          <h4>Contact Us</h4>
+          <p><i class="ri-map-pin-2-fill"></i>14/234,VOC street, JagaNagar West , Nanthapuram , Saravanampatti,Coimbatore</p>
+          <p><i class="ri-mail-fill"></i>medihelp@gmail.com</p>
+          <p><i class="ri-phone-fill"></i>+91 95888 95888</p>
+        </div>
+      </div>
+      <div class="footer__bar">
+        <div class="footer__bar__content">
+          <p>Copyright © 2025.All rights reserved.</p>
+          <div class="footer__socials">
+            <span><i class="ri-instagram-line"></i></span>
+            <span><i class="ri-facebook-fill"></i></span>
+            <span><i class="ri-heart-fill"></i></span>
+            <span><i class="ri-twitter-fill"></i></span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+  <script>
+    document.querySelectorAll('.tab-item').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab-item').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+    
+    tab.classList.add('active');
+    const tabId = tab.getAttribute('data-tab');
+    document.getElementById(tabId).classList.add('active');
+  });
+});
+   
+
+  // CHATBOT SCRIPT
+  (function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="BWaSZmTLkPeu3vTjkzVuJ";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
+
+  </script>
+</html>

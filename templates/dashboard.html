@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #12ac8e;
+            --primary-color-dark: #0d846c;
+            --secondary-color: #005792;
+            --text-dark: #2c3e50;
+            --white: #ffffff;
+            --max-width: 1200px;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+                        url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 80px auto;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .button-container button {
+            background: var(--primary-color);
+            color: var(--white);
+            font-size: 18px;
+            padding: 18px 30px;
+            width: 100%;
+            max-width: 300px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(18, 172, 142, 0.3);
+        }
+
+        .button-container button:hover {
+            background: var(--primary-color-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(18, 172, 142, 0.4);
+        }
+
+        .button-container button i {
+            font-size: 24px;
+        }
+
+        .back-button {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 87, 146, 0.3);
+        }
+
+        .back-button:hover {
+            background-color: #003f6f;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 40px 20px;
+                padding: 30px 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .button-container button {
+                font-size: 16px;
+                padding: 15px 20px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Medical Diagnostic Assistant</h1>
+        <div class="button-container">
+            <button onclick="window.location.href='{{ url_for('cardio') }}'">
+                ❤️ Cardiovascular Analysis
+            </button>
+            <button onclick="window.location.href='{{ url_for('respiratory') }}'">
+                🌬️ Respiratory Assessment
+            </button>
+            <button onclick="window.location.href='{{ url_for('diabetes') }}'">
+                🩸 Diabetes Evaluation
+            </button>
+        </div>
+        <a href="{{ url_for('index') }}"><button class="back-button" >
+            Return Back
+        </button></a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardio Risk Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        
+        /* Base Styles */
+        :root {
+            --primary-blue: #2980b9;
+            --secondary-blue: #3498db;
+            --success-green: #27ae60;
+            --error-red: #e74c3c;
+            --background-light: #f7f9fc;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+    font-family: 'Poppins', sans-serif;
+    background: url('https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+
+        /* Glassmorphism Container */
+        .container {
+            background: rgba(192, 181, 181, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            animation: fadeIn 0.4s ease-out;
+            opacity: 70%;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            font-size: 2.8rem;
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .description {
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Form Grid Layout */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            position: relative;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(41, 128, 185, 0.15);
+        }
+
+        label {
+            display: block;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 12px rgba(41, 128, 185, 0.2);
+            outline: none;
+        }
+
+        /* Custom Select Styling */
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-blue);
+            pointer-events: none;
+        }
+
+        select.input-field {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        /* Interactive Button */
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(41, 128, 185, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Result Display */
+        .result-card {
+            margin-top: 30px;
+            padding: 25px;
+            background: #e8f5e9;
+            border-radius: 12px;
+            text-align: center;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .result-text {
+            color: var(--success-green);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Loading Animation */
+        .loader {
+            display: none;
+            width: 40px;
+            height: 40px;
+            margin: 20px auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: block;
+            width: fit-content;
+            margin: 25px auto 0;
+            padding: 12px 30px;
+            background: var(--primary-blue);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Error Styling */
+        .error-message {
+            color: var(--error-red);
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .input-error {
+            border-color: var(--error-red) !important;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .submit-btn {
+                font-size: 1rem;
+                padding: 15px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>❤️ Cardio Risk Prediction</h1>
+        <p class="description">Provide your health information to receive an instant cardiovascular risk assessment.</p>
+        
+        <form id="predictionForm" class="form-grid">
+            <!-- Column 1 -->
+            <div class="form-group">
+                <label for="age">Age (in days)</label>
+                <input type="number" id="age" class="input-field" min="1" max="1000000" required>
+                <div class="error-message" id="age-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <div class="select-wrapper">
+                    <select id="gender" class="input-field" required>
+                        <option value="">Select Gender</option>
+                        <option value="1">Male</option>
+                        <option value="2">Female</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="height">Height (cm)</label>
+                <input type="number" id="height" class="input-field" min="100" max="250" required>
+                <div class="error-message" id="height-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="weight">Weight (kg)</label>
+                <input type="number" id="weight" class="input-field" min="30" max="300" required>
+                <div class="error-message" id="weight-error"></div>
+            </div>
+
+            <!-- Column 2 -->
+            <div class="form-group">
+                <label for="ap_hi">Systolic BP</label>
+                <input type="number" id="ap_hi" class="input-field" min="50" max="250" required>
+                <div class="error-message" id="ap_hi-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="ap_lo">Diastolic BP</label>
+                <input type="number" id="ap_lo" class="input-field" min="30" max="150" required>
+                <div class="error-message" id="ap_lo-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="cholesterol">Cholesterol Level</label>
+                <select id="cholesterol" class="input-field" required>
+                    <option value="">Select Level</option>
+                    <option value="1">Normal</option>
+                    <option value="2">Above Normal</option>
+                    <option value="3">Well Above Normal</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="gluc">Glucose Level</label>
+                <select id="gluc" class="input-field" required>
+                    <option value="">Select Level</option>
+                    <option value="1">Normal</option>
+                    <option value="2">Above Normal</option>
+                    <option value="3">Well Above Normal</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="active">Activity Level</label>
+                <select id="active" class="input-field" required>
+                    <option value="">Select Activity</option>
+                    <option value="1">Sedentary</option>
+                    <option value="2">Moderate</option>
+                    <option value="3">Active</option>
+                </select>
+            </div>
+        </form>
+
+        <button type="button" class="submit-btn" onclick="submitForm()">
+            <span class="btn-text">Analyze Heart Health</span>
+            <div class="loader" id="loader"></div>
+        </button>
+
+        <div id="result" class="result-card" style="display: none;">
+            <p class="result-text"></p>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="back-btn">← Back to Dashboard</a>
+    </div>
+
+    <script>
+        function submitForm() {
+            const loader = document.getElementById('loader');
+            const resultCard = document.getElementById('result');
+            const resultText = document.querySelector('.result-text');
+            
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+                el.previousElementSibling.classList.remove('input-error');
+            });
+
+            // Show loader
+            loader.style.display = 'inline-block';
+            document.querySelector('.btn-text').style.visibility = 'hidden';
+
+            const data = {
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                height: document.getElementById('height').value,
+                weight: document.getElementById('weight').value,
+                ap_hi: document.getElementById('ap_hi').value,
+                ap_lo: document.getElementById('ap_lo').value,
+                cholesterol: document.getElementById('cholesterol').value,
+                gluc: document.getElementById('gluc').value,
+                active: document.getElementById('active').value
+            };
+
+            // Validate inputs
+            let isValid = true;
+            const fields = [
+                {id: 'age', min: 1, max: 1000000},
+                {id: 'height', min: 100, max: 250},
+                {id: 'weight', min: 30, max: 300},
+                {id: 'ap_hi', min: 50, max: 250},
+                {id: 'ap_lo', min: 30, max: 150}
+            ];
+
+            fields.forEach(field => {
+                const value = parseInt(data[field.id]);
+                if (isNaN(value) || value < field.min || value > field.max) {
+                    showError(field.id, `Please enter a value between ${field.min}-${field.max}`);
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                loader.style.display = 'none';
+                document.querySelector('.btn-text').style.visibility = 'visible';
+                return;
+            }
+
+            // Simulate API call
+            fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                resultCard.style.display = 'block';
+                resultText.textContent = result.result 
+                    ? `Risk Level: ${result.result}`
+                    : 'Could not calculate risk level';
+            })
+            .catch(error => {
+                resultCard.style.display = 'block';
+                resultText.textContent = 'Error processing request';
+            })
+            .finally(() => {
+                loader.style.display = 'none';
+                document.querySelector('.btn-text').style.visibility = 'visible';
+            });
+        }
+
+        function showError(fieldId, message) {
+            const input = document.getElementById(fieldId);
+            const errorElement = document.getElementById(`${fieldId}-error`);
+            input.classList.add('input-error');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

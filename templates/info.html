@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Statistics Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #3B82F6;
+            --secondary: #10B981;
+            --accent: #EF4444;
+            --text: #1F2937;
+            --light-bg: #F9FAFB;
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        
+        .hero-section {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 1.5rem;
+            margin: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-heading {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            animation: textGlow 2s ease-in-out infinite alternate;
+            text-shadow: 0 4px 24px rgba(0,0,0,0.2);
+        }
+
+        .sub-heading {
+            font-size: 1.4rem;
+            color: rgba(255,255,255,0.9);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .animated-dots {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .dot {
+            position: absolute;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            animation: float 12s infinite linear;
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 4px 24px rgba(0,0,0,0.2); }
+            to { text-shadow: 0 8px 48px rgba(255,255,255,0.3); }
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(0.8); }
+            50% { transform: translate(100px, -50px) scale(1.2); }
+            100% { transform: translate(0, 0) scale(0.8); }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 4rem 1rem;
+                margin: 1rem;
+            }
+            
+            .main-heading {
+                font-size: 2.2rem;
+            }
+            
+            .sub-heading {
+                font-size: 1.1rem;
+                padding: 0 1rem;
+            }
+        }
+
+
+        body {
+            background: var(--light-bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Section Layout */
+        .health-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin: 6rem 0;
+            position: relative;
+        }
+
+        .section-image {
+            position: relative;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transform: rotate(-2deg);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .section-image:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .section-image img {
+            width: 100%;
+            height: 480px;
+            object-fit: cover;
+            border-radius: 1.5rem;
+        }
+
+        .section-content {
+            padding: 2.5rem;
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-content::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            z-index: -1;
+            border-radius: 2rem;
+            opacity: 0.08;
+        }
+
+        /* Statistics Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+
+        .stat-card {
+            padding: 1.5rem;
+            background: var(--light-bg);
+            border-radius: 1rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0.3;
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .stat-icon i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Chart Styling */
+        .chart-container {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Prevention List */
+        .prevention-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .prevention-list li {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.2s ease;
+        }
+
+        .prevention-list li:hover {
+            transform: translateX(8px);
+        }
+
+        .prevention-list i {
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .health-section {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .section-image {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .section-content {
+                margin: 0 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-image img {
+                height: 360px;
+            }
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        .back-button i {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+                <!-- Back Button -->
+                <a onclick="window.location.href='{{ url_for('index') }}'" class="back-button">
+                    <i class="ri-arrow-left-line"></i>
+                </a>
+                
+    <!-- Add this heading section -->
+    <section class="hero-section">
+        <div class="animated-dots">
+            <div class="dot" style="width: 40px; height: 40px; top: 20%; left: 15%;"></div>
+            <div class="dot" style="width: 60px; height: 60px; top: 60%; right: 20%;"></div>
+            <div class="dot" style="width: 30px; height: 30px; top: 80%; left: 30%;"></div>
+        </div>
+        
+        <div class="hero-content">
+            <h1 class="main-heading">HealthGuard Analytics</h1>
+            <p class="sub-heading">
+                Transform Your Wellness Journey with Real-time Health Insights<br>
+                and Data-Driven Prevention Strategies
+            </p>
+        </div>
+
+    </section>
+        <!-- Cardiology Section -->
+        <section class="health-section">
+            <div class="section-image">
+                <img src="https://images.unsplash.com/photo-1618939304347-e91b1f33d2ab?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8aGVhcnQlMjBoZWFsdGh8ZW58MHx8MHx8fDA%3D" alt="Heart Health">
+            </div>
+            <div class="section-content">
+                <h2>Cardiovascular Health Insights</h2>
+                <p class="subtitle">Key statistics and prevention strategies</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="ri-heart-pulse-line"></i>
+                            </div>
+                            <h3>Risk Factors</h3>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 65%; background: var(--accent);"></div>
+                        </div>
+                        <p>65% of cases linked to lifestyle factors</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="ri-shield-check-line"></i>
+                            </div>
+                            <h3>Prevention</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="cardioChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Effective Prevention Measures</h4>
+                <ul class="prevention-list">
+                    <li><i class="ri-walk-line"></i>150 mins weekly exercise</li>
+                    <li><i class="ri-leaf-line"></i>Increase leafy greens intake</li>
+                    <li><i class="ri-flask-line"></i>Regular cholesterol checks</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Respiratory Section -->
+        <section class="health-section">
+            <div class="section-content">
+                <h2>Respiratory Health Analytics</h2>
+                <p class="subtitle">Air quality impact and protection methods</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="ri-lungs-line"></i>
+                            </div>
+                            <h3>Pollution Impact</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="respiratoryChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="ri-cloudy-line"></i>
+                            </div>
+                            <h3>Air Quality</h3>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 78%; background: var(--primary);"></div>
+                        </div>
+                        <p>78% improvement with proper filtration</p>
+                    </div>
+                </div>
+
+                <h4>Protection Strategies</h4>
+                <ul class="prevention-list">
+                    <li><i class="ri-mask-line"></i>Use N95 masks outdoors</li>
+                    <li><i class="ri-home-smile-line"></i>Indoor air purification</li>
+                    <li><i class="ri-alarm-warning-line"></i>Avoid peak pollution hours</li>
+                </ul>
+            </div>
+            <div class="section-image">
+                <img src="https://media.istockphoto.com/id/1174680850/photo/heart-stethoscope-and-ekg.webp?a=1&b=1&s=612x612&w=0&k=20&c=uNiRvq0bBFh0mA7bktSVMphOL1Mo5PMnnxOccLxEwRM=" alt="Lung Health">
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Cardiovascular Chart
+        new Chart(document.getElementById('cardioChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Controlled', 'At Risk'],
+                datasets: [{
+                    data: [35, 65],
+                    backgroundColor: ['#10B981', '#EF4444'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                cutout: '70%',
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Respiratory Chart
+        new Chart(document.getElementById('respiratoryChart'), {
+            type: 'bar',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024'],
+                datasets: [{
+                    label: 'AQI Improvement',
+                    data: [78, 72, 65, 58, 49],
+                    backgroundColor: '#3B82F6'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

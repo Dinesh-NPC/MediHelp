@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respiratory Health Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2A5C82;
+            --secondary-color: #5BA4E6;
+            --success-green: #27ae60;
+            --error-red: #e74c3c;
+            --text-light: #7f8c8d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(155, 155, 155, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+            animation: fadeIn 0.4s ease-out;
+            opacity: 70%;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .form-group:hover {
+            transform: translateY(-3px);
+        }
+
+        label {
+            display: block;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .input-field, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            pointer-events: none;
+        }
+
+        select {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .result-card {
+            margin-top: 25px;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .result-text {
+            color: var(--success-green);
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            display: block;
+            width: fit-content;
+            margin: 25px auto 0;
+            padding: 12px 30px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🫁 Respiratory Health Assessment</h1>
+        
+        <form id="respiratoryForm" class="form-grid">
+            <!-- Personal Information -->
+            <div class="form-group">
+                <label>Age</label>
+                <input type="number" id="age" class="input-field" min="1" max="120" required>
+            </div>
+
+            <!-- Lifestyle Factors -->
+            <div class="form-group">
+                <label>Smoking</label>
+                <div class="select-wrapper">
+                    <select id="smoking" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Alcohol Consumption</label>
+                <div class="select-wrapper">
+                    <select id="alcohol_consuming" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Symptoms -->
+            <div class="form-group">
+                <label>Yellow Fingers</label>
+                <div class="select-wrapper">
+                    <select id="yellow_fingers" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Anxiety</label>
+                <div class="select-wrapper">
+                    <select id="anxiety" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Peer Pressure</label>
+                <div class="select-wrapper">
+                    <select id="peer_pressure" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Chronic Disease</label>
+                <div class="select-wrapper">
+                    <select id="chronic_disease" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Fatigue</label>
+                <div class="select-wrapper">
+                    <select id="fatigue" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Allergy</label>
+                <div class="select-wrapper">
+                    <select id="allergy" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Wheezing</label>
+                <div class="select-wrapper">
+                    <select id="wheezing" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Coughing</label>
+                <div class="select-wrapper">
+                    <select id="coughing" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label>Swallowing Difficulty</label>
+                <div class="select-wrapper">
+                    <select id="swallowing_difficulty" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Chest Pain</label>
+                <div class="select-wrapper">
+                    <select id="chest_pain" required>
+                        <option value="">Select Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+
+        <button type="button" class="submit-btn" onclick="handleSubmission()">
+            Analyze Respiratory Health
+        </button>
+
+        <div id="result" class="result-card">
+            <p class="result-text"></p>
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="back-btn">← Back to Dashboard</a>
+    </div>
+
+    <script>
+        function handleSubmission() {
+            const formData = {
+                age: document.getElementById('age').value,
+                smoking: document.getElementById('smoking').value,
+                yellow_fingers: document.getElementById('yellow_fingers').value,
+                anxiety: document.getElementById('anxiety').value,
+                peer_pressure: document.getElementById('peer_pressure').value,
+                chronic_disease: document.getElementById('chronic_disease').value,
+                fatigue: document.getElementById('fatigue').value,
+                allergy: document.getElementById('allergy').value,
+                wheezing: document.getElementById('wheezing').value,
+                alcohol_consuming: document.getElementById('alcohol_consuming').value,
+                coughing: document.getElementById('coughing').value,
+                swallowing_difficulty: document.getElementById('swallowing_difficulty').value,
+                chest_pain: document.getElementById('chest_pain').value
+            };
+
+            if (validateForm(formData)) {
+                submitForm(formData);
+            }
+        }
+
+        function validateForm(data) {
+            let isValid = true;
+            
+            // Validate age
+            if (data.age < 1 || data.age > 120) {
+                alert('Please enter a valid age (1-120)');
+                isValid = false;
+            }
+
+            // Check all selects are filled
+            document.querySelectorAll('select').forEach(select => {
+                if (!select.value) {
+                    select.style.borderColor = 'red';
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        async function submitForm(data) {
+            try {
+                const response = await fetch('/predict_respiratory', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                document.querySelector('.result-text').textContent = 
+                    `Prediction: ${result.prediction}`;
+                document.getElementById('result').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Submission error:', error);
+                document.querySelector('.result-text').textContent = 
+                    'Error processing request';
+                document.getElementById('result').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
