@@ -88,13 +88,16 @@ Register Page
 
 ---
 
-## 🤝 Contributing
+## 👨‍💻 Author
 
-1. Fork the repository.  
-2. Create a new branch (`git checkout -b feature-name`).  
-3. Make your changes and commit (`git commit -m 'Add feature'`).  
-4. Push to the branch (`git push origin feature-name`).  
-5. Open a Pull Request for review.  
+**T Dinesh Kumar**  
+B.Tech IT, Kumaraguru College of Technology  
+[LinkedIn](https://www.linkedin.com/in/dinesh-kumar-kct)  
 
 ---
+
+## ⭐️ Show Your Support
+
+If you found this project useful, consider ⭐ starring the repository and sharing it!
+
  
