@@ -2,11 +2,13 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_pymongo import PyMongo
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import jsonify
+from flask_cors import CORS
 import numpy as np
 import pandas as pd
 import joblib
 
 app = Flask(__name__,static_folder='static')
+CORS(app)
 
 # Secret key for sessions
 app.secret_key = 'fe7022fd790d9bbf803ecd723c8e77f2'
@@ -20,10 +22,14 @@ mongo = PyMongo(app)
 
 
 
-# Load the model 
-model = joblib.load(r'C:\Users\abish\OneDrive\Desktop\clinics\Project\MediHelp\cardio_model.pkl')
-dia_model = joblib.load(r'C:\Users\abish\OneDrive\Desktop\clinics\Project\MediHelp\diabetes_model.pkl')
-resp_model = joblib.load(r'C:\Users\abish\OneDrive\Desktop\clinics\Project\MediHelp\respiratory_predict.pkl')  
+# Load the model
+model = joblib.load('cardio_model.pkl')
+# Fix for XGBoost version compatibility
+model.use_label_encoder = True
+model.gpu_id = -1
+model.predictor = None
+# dia_model = joblib.load('diabetes_model.pkl')  # Model file missing
+resp_model = joblib.load('respiratory_predict.pkl')
 
 
 
@@ -141,43 +147,43 @@ def login():
 
 
 #diabetes_prediction
-@app.route('/predict_diabetes', methods=['POST'])
-def predict_diabetes():
-    try:
-        # Get the data from the POST request (JSON format)
-        data = request.get_json()
+# @app.route('/predict_diabetes', methods=['POST'])
+# def predict_diabetes():
+#     try:
+#         # Get the data from the POST request (JSON format)
+#         data = request.get_json()
 
-        # Extract input values from the received JSON
-        gender = int(data['gender'])
-        age = float(data['age'])
-        hypertension = int(data['hypertension'])
-        heart_disease = int(data['heart_disease'])
-        smoking_history = int(data['smoking_history'])
-        bmi = float(data['bmi'])
-        hba1c_level = float(data['HbA1c_level'])
-        blood_glucose_level = float(data['blood_glucose_level'])
+#         # Extract input values from the received JSON
+#         gender = int(data['gender'])
+#         age = float(data['age'])
+#         hypertension = int(data['hypertension'])
+#         heart_disease = int(data['heart_disease'])
+#         smoking_history = int(data['smoking_history'])
+#         bmi = float(data['bmi'])
+#         hba1c_level = float(data['HbA1c_level'])
+#         blood_glucose_level = float(data['blood_glucose_level'])
 
-        # Calculate glucose_bmi_ratio
-        glucose_bmi_ratio = blood_glucose_level / bmi
+#         # Calculate glucose_bmi_ratio
+#         glucose_bmi_ratio = blood_glucose_level / bmi
 
-        # Prepare the input data for prediction
-        input_data = pd.DataFrame([[gender, age, hypertension, heart_disease, smoking_history, 
-                                    bmi, hba1c_level, blood_glucose_level, glucose_bmi_ratio]],
-                                  columns=['gender', 'age', 'hypertension', 'heart_disease', 
-                                           'smoking_history', 'bmi', 'HbA1c_level', 
-                                           'blood_glucose_level', 'glucose_bmi_ratio'])
+#         # Prepare the input data for prediction
+#         input_data = pd.DataFrame([[gender, age, hypertension, heart_disease, smoking_history, 
+#                                     bmi, hba1c_level, blood_glucose_level, glucose_bmi_ratio]],
+#                                   columns=['gender', 'age', 'hypertension', 'heart_disease', 
+#                                            'smoking_history', 'bmi', 'HbA1c_level', 
+#                                            'blood_glucose_level', 'glucose_bmi_ratio'])
 
-        # Make the prediction
-        prediction = dia_model.predict(input_data)
+#         # Make the prediction
+#         prediction = dia_model.predict(input_data)
 
-        # Return prediction result
-        if prediction[0] == 1:
-            return jsonify({'result': 'High diabetes risk'})
-        else:
-            return jsonify({'result': 'Low diabetes risk'})
+#         # Return prediction result
+#         if prediction[0] == 1:
+#             return jsonify({'result': 'High diabetes risk'})
+#         else:
+#             return jsonify({'result': 'Low diabetes risk'})
 
-    except Exception as e:
-        return jsonify({'error': f'Error in prediction: {str(e)}'}), 500
+#     except Exception as e:
+#         return jsonify({'error': f'Error in prediction: {str(e)}'}), 500
 
 
 
@@ -207,6 +213,12 @@ def predict():
 
         #input data for prediction (in NumPy array format)
         input_data = np.array([[user_id, age, gender, height, weight, ap_hi, ap_lo, cholesterol, gluc, active]])
+
+        # Fix for XGBoost version compatibility
+        try:
+            model.set_params(use_label_encoder=False)
+        except:
+            pass
 
         # Make the prediction using the model
         prediction = model.predict(input_data)
